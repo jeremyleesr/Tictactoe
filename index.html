@@ -55,89 +55,78 @@
   <div id="board"></div>
   <button onclick="resetGame()">Reset Game</button>
 
-  <script>
-    let board = ['', '', '', '', '', '', '', '', ''];
-    let currentPlayer = 'X';
-    let gameActive = true;
-    const statusDisplay = document.getElementById('status');
-    const boardElement = document.getElementById('board');
+<script>
+  let board = ['', '', '', '', '', '', '', '', ''];
+  let currentPlayer = 'X';
+  let gameActive = true;
+  const statusDisplay = document.getElementById('status');
+  const boardElement = document.getElementById('board');
 
-    const winningConditions = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
-    ];
+  const winningConditions = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+  ];
 
-    // Create the board
-    for (let i = 0; i < 9; i++) {
-      const cell = document.createElement('div');
-      cell.classList.add('cell');
-      cell.addEventListener('click', () => handleCellClick(i));
-      boardElement.appendChild(cell);
+  // Create the 9 cells
+  const cells = [];
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement('div');
+    cell.classList.add('cell');
+    cell.addEventListener('click', () => handleCellClick(i));
+    boardElement.appendChild(cell);
+    cells.push(cell);
+  }
+
+  function handleCellClick(index) {
+    if (board[index] !== '' || !gameActive) return;
+
+    board[index] = currentPlayer;
+    cells[index].textContent = currentPlayer;
+
+    checkWinner();
+
+    if (gameActive) {
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      statusDisplay.textContent = `Player ${currentPlayer}'s turn`;
     }
+  }
 
-    const cells = document.querySelectorAll('.cell');
-
-    function handleCellClick(index) {
-      if (board[index] !== '' || !gameActive) return;
-
-      board[index] = currentPlayer;
-      cells[index].textContent = currentPlayer;
-
-      checkWinner();
-      
-      if (gameActive) {
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        statusDisplay.textContent = `Player ${currentPlayer}'s turn`;
-      }
-    }
-
-    function checkWinner() {
-      let won = false;
-      for (let condition of winningConditions) {
-        const [a, b, c] = condition;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-          statusDisplay.textContent = `Player ${board[a]} wins! 🎉`;
-          gameActive = false;
-          won = true;
-                    statusDisplay.textContent = `Player ${board[a]} wins! 🎉`;
-          gameActive = false;
-          won = true;
-          
-          // Highlight the winning cells
-          cells[a].classList.add('win');
-          cells[b].classList.add('win');
-          cells[c].classList.add('win');
-          
-          break;
-          break;
-        }
-      }
-      if (!won && board.every(cell => cell !== '')) {
-        statusDisplay.textContent = "It's a tie! 🤝";
+  function checkWinner() {
+    let won = false;
+    for (let condition of winningConditions) {
+      const [a, b, c] = condition;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        statusDisplay.textContent = `Player ${board[a]} wins! 🎉`;
         gameActive = false;
+        won = true;
+
+        // Glow the winning line
+        cells[a].classList.add('win');
+        cells[b].classList.add('win');
+        cells[c].classList.add('win');
+        break;
       }
     }
-
-    function resetGame() {
-      board = ['', '', '', '', '', '', '', '', ''];
-      currentPlayer = 'X';
-      gameActive = true;
-      statusDisplay.textContent = "Player X's turn";
-      cells.forEach(cell => cell.textContent = '');
+    if (!won && board.every(cell => cell !== '')) {
+      statusDisplay.textContent = "It's a tie! 🤝";
+      gameActive = false;
     }
-.win {
-  background-color: #90ee90 !important; /* light green */
-  animation: pulse 1s infinite;
-}
+  }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-    // Start the game
-    resetGame();
-  </script>
+  function resetGame() {
+    board = ['', '', '', '', '', '', '', '', ''];
+    currentPlayer = 'X';
+    gameActive = true;
+    statusDisplay.textContent = "Player X's turn";
+    cells.forEach(cell => {
+      cell.textContent = '';
+      cell.classList.remove('win');
+    });
+  }
+
+  // Start fresh
+  resetGame();
+</script>
 </body>
 </html>
