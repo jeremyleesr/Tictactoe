@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background-color: #ff69b4;
+    background-color: #9f7aea;
   color: white;
   margin: 0;
   padding: 20px;
@@ -9,6 +9,8 @@ body {
 
 h1 {
   color: white;
+  font-family: 'Brush Script MT', 'Comic Sans MS', cursive, sans-serif;
+  font-size: 48px;
 }
 
 #board {
